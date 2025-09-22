@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <base target="_top">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สถิติ OTP Virtual Run 2025</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <style>
+        :root {
+            --primary-blue: #007bff; /* Bootstrap primary blue */
+            --accent-green: #28a745; /* Bootstrap success green */
+            --light-bg: #f0f2f5; /* Lighter background */
+            --card-bg: #ffffff;
+            --text-color: #343a40;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-hover: rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to top */
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px; /* More rounded */
+            box-shadow: 0 8px 20px var(--shadow-light); /* Softer shadow */
+            width: 100%;
+            max-width: 900px; /* Wider container for charts */
+            margin-top: 30px;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .container:hover {
+            box-shadow: 0 12px 30px var(--shadow-hover);
+        }
+
+        h2 {
+            color: var(--primary-blue);
+            font-weight: 700;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+        }
+
+        #chart_div {
+            width: 100%;
+            height: 550px; /* Slightly taller chart */
+            margin-top: 20px;
+            background-color: #fcfcfc;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); /* Inner shadow for depth */
+        }
+
+        #loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 550px; /* Match chart height */
+        }
+
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            color: var(--primary-blue) !important;
+        }
+
+        .btn-back {
+            margin-top: 30px;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            border-radius: 50px; /* Pill shape button */
+            background-image: linear-gradient(to right, var(--primary-blue) 0%, #0056b3 100%);
+            border: none;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.5);
+            background-image: linear-gradient(to right, #0056b3 0%, var(--primary-blue) 100%);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            .container {
+                padding: 25px;
+                margin-top: 15px;
+            }
+            h2 {
+                font-size: 1.8em;
+            }
+            #chart_div {
+                height: 400px;
+            }
+            .btn-back {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center mb-4">📊 สรุประยะทางรวมแต่ละหน่วยงาน</h2>
+
+        <div id="loading-spinner">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+
+        <div id="chart_div" style="display:none;"></div>
+
+        <div class="text-center">
+            <button id="backButton" class="btn btn-primary btn-back">⬅️ กลับไปหน้าบันทึกผล</button>
+        </div>
+    </div>
+
+    <script>
+        google.charts.load('current', {'packages':['corechart', 'bar']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            google.script.run.withSuccessHandler(function(data) {
+
+                document.getElementById('loading-spinner').style.display = 'none';
+                document.getElementById('chart_div').style.display = 'block';
+
+                if (!data || data.length === 0) {
+                    document.getElementById('chart_div').innerHTML = '<p class="text-center text-muted mt-5">ยังไม่มีข้อมูลสำหรับแสดงผล</p>';
+                    return;
+                }
+
+                var dataTable = new google.visualization.DataTable();
+                dataTable.addColumn('string', 'หน่วยงาน');
+                dataTable.addColumn('number', 'ระยะทางรวม (กม.)');
+                dataTable.addColumn({type: 'string', role: 'annotation'}); // เพิ่มคอลัมน์สำหรับ Annotation
+
+                data.forEach(function(item) {
+                    // ปัดทศนิยม 2 ตำแหน่งและแปลงเป็น String เพื่อแสดงใน Annotation
+                    const formattedDistance = item.distance.toFixed(2) + ' กม.';
+                    dataTable.addRow([item.department, item.distance, formattedDistance]);
+                });
+
+                var options = {
+                    title: 'ระยะทางวิ่งสะสม (กม.) เรียงจากมากไปน้อย',
+                    titleTextStyle: {
+                        color: '#495057',
+                        fontSize: 18,
+                        bold: true
+                    },
+                    chartArea: {width: '70%', height: '80%', left: '20%'}, // ปรับพื้นที่กราฟ
+                    hAxis: {
+                        title: 'ระยะทางรวม (กม.)',
+                        minValue: 0,
+                        textStyle: {
+                            color: '#6c757d',
+                            fontSize: 12
+                        },
+                        titleTextStyle: {
+                            color: '#495057',
+                            fontSize: 14
+                        },
+                        gridlines: {
+                            color: '#e9ecef' // สีเส้น Grid
+                        }
+                    },
+                    vAxis: {
+                        title: 'หน่วยงาน',
+                        textStyle: {
+                            color: '#6c757d',
+                            fontSize: 12
+                        },
+                        titleTextStyle: {
+                            color: '#495057',
+                            fontSize: 14
+                        },
+                        gridlines: {
+                            color: 'transparent' // ซ่อนเส้น Grid แนวตั้ง
+                        }
+                    },
+                    legend: { position: 'none' },
+                    bars: 'horizontal',
+                    series: {
+                        0: { color: '#007bff' } // สีของแท่งกราฟ
+                    },
+                    bar: { groupWidth: '85%' }, // ความกว้างของแท่งกราฟ
+                    annotations: {
+                        alwaysOutside: true, // ให้ตัวเลขแสดงด้านนอกแท่งเสมอ
+                        textStyle: {
+                            fontSize: 12,
+                            color: '#343a40',
+                            auraColor: 'none' // ไม่มีเงารอบตัวเลข
+                        }
+                    },
+                    fontName: 'Sarabun', // กำหนด Font ทั่วทั้ง Chart
+                    tooltip: {
+                        textStyle: {
+                            fontName: 'Sarabun',
+                            fontSize: 13
+                        },
+                        showColorCode: true
+                    }
+                };
+
+                var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+                chart.draw(dataTable, options);
+
+            }).withFailureHandler(function(error) {
+                document.getElementById('loading-spinner').style.display = 'none';
+                document.getElementById('chart_div').style.display = 'block'; // แสดง div เพื่อแสดงข้อผิดพลาด
+                document.getElementById('chart_div').innerHTML = '<p class="text-center text-danger mt-5">เกิดข้อผิดพลาดในการโหลดข้อมูล: ' + error.message + '</p>';
+            }).getStatsData(); // ตรวจสอบว่ามีฟังก์ชันนี้ใน Code.gs
+        }
+
+        // ฟังก์ชันสำหรับปุ่มย้อนกลับ (ใช้โค้ดที่แก้ไขล่าสุด)
+        document.getElementById('backButton').addEventListener('click', function() {
+            google.script.run
+                .withSuccessHandler(function(currentUrl) {
+                    window.top.location.href = currentUrl;
+                })
+                .getWebAppUrl(); // ต้องมีฟังก์ชันนี้ใน Code.gs
+        });
+    </script>
+</body>
+</html>
