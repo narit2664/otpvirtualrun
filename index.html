@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>OTP Virtual Run 2025</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        :root {
+            --primary-blue: #3498db;
+            --accent-yellow: #f1c40f;
+            --light-gray: #ecf0f1;
+            --medium-gray: #bdc3c7;
+            --dark-gray: #7f8c8d;
+            --text-color: #34495e;
+        }
+
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: var(--light-gray);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            box-sizing: border-box;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--primary-blue);
+            padding-bottom: 15px;
+        }
+
+        .header h1 {
+            color: var(--primary-blue);
+            margin: 0;
+            font-size: 2em;
+        }
+
+        .header p {
+            color: var(--dark-gray);
+            margin-top: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="time"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1em;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+        }
+
+        .file-upload-wrapper {
+            border: 2px dashed var(--medium-gray);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        .file-upload-wrapper:hover {
+             border-color: var(--primary-blue);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        #fileName {
+            margin-top: 10px;
+            color: var(--dark-gray);
+            font-style: italic;
+        }
+
+        .image-preview-container {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        #imagePreview {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            border: 1px solid var(--medium-gray);
+            display: none;
+            object-fit: cover;
+        }
+        
+        /* NEW: CSS for Duration Group */
+        .duration-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .duration-group input {
+            text-align: center;
+        }
+
+        .duration-group span {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--dark-gray);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        button:active {
+            transform: scale(0.98);
+        }
+    </style>
+    <style>
+.label-container {
+  display: flex;
+  align-items: center; /* จัดให้ไอคอนและข้อความอยู่ตรงกลางในแนวตั้ง */
+  gap: 10px; /* เพิ่มช่องว่างระหว่างไอคอนและข้อความ */
+}
+
+/* เพิ่มช่องว่างด้านล่างของ label เพื่อไม่ให้ติดกับ input */
+.label-container label {
+  margin-bottom: 0;
+}
+</style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏃‍♂️🏃🏻‍♀️<p style="color: #0000FF; font-size: 25px;">OTP Virtual Run 2025</p></h1>
+            <p>ฟอร์มบันทึกข้อมูลกิจกรรมการวิ่ง</p>
+        </div>
+        
+<div class="form-group text-center">
+  <button id="statsButton" class="btn btn-secondary">📊 กดดูข้อมูล Running Rankings</button>
+</div>
+
+
+
+
+        <form id="runForm">
+            <div class="form-group">
+              <div class="label-container">
+    <i class="fa-solid fa-lg fa-circle-user"></i>
+    <label for="fullName">ชื่อ-นามสกุล</label>
+  </div>
+                <input type="text" id="fullName" name="fullName" required>
+            </div>
+            
+            <div class="form-group">
+               <div class="label-container">
+    <i class="fa-solid fa-lg fa-landmark"></i>
+                <label for="department">หน่วยงาน</label>
+                </div>
+                <select id="department" name="department" required>
+                    <option value="" disabled selected>-- เลือกหน่วยงาน --</option>
+                    <option value="บริหาร">บริหาร</option>
+                    <option value="กตส.">กตส.</option>
+                    <option value="กพร.">กพร.</option>
+                    <option value="สบก.">สบก.</option>
+                    <option value="กจร.">กจร.</option>
+                    <option value="สผง.">สผง.</option>
+                    <option value="สสภ.">สสภ.</option>
+                    <option value="สผป.">สผป.</option>
+                    <option value="ศทท.">ศทท.</option>
+                    <option value="กพข.">กพข.</option>
+                    <option value="สตร.">สตร.</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+               <div class="label-container">
+    <i class="fa-regular fa-lg fa-calendar"></i>
+                <label for="activityDate">วันที่ทำกิจกรรม</label>
+                </div>
+                <input type="date" id="activityDate" name="activityDate" required>
+            </div>
+            
+            <div class="form-group">
+               <div class="label-container">
+    <i class="fa-regular fa-lg fa-clock"></i>
+                <label for="activityTime">เวลาที่ทำกิจกรรม</label>
+                </div>
+                <input type="time" id="activityTime" name="activityTime" required>
+            </div>
+
+            <div class="form-group">
+              <div class="label-container">
+    <i class="fa-solid fa-lg fa-flag-checkered"></i>
+                <label for="quantity">ระยะทางที่ทำได้ (กิโลเมตร)</label>
+                </div>
+                <input type="number" id="quantity" name="quantity" step="0.01" min="0" required placeholder="เช่น 5.25">
+            </div>
+
+            <div class="form-group">
+               <div class="label-container">
+    <i class="fa-solid fa-lg fa-stopwatch"></i>
+                <label for="duration_hr">เวลาที่ใช้ไป</label>
+                </div>
+                <div class="duration-group">
+                    <input type="number" id="duration_hr" name="duration_hr" min="0" max="99" placeholder="ชั่วโมง" required>
+                    <span>:</span>
+                    <input type="number" id="duration_min" name="duration_min" min="0" max="59" placeholder="นาที" required>
+                    <span>:</span>
+                    <input type="number" id="duration_sec" name="duration_sec" min="0" max="59" placeholder="วินาที" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+              <div class="label-container">
+    <i class="fa-regular fa-lg fa-image"></i>
+                <label for="imageUpload">รูปภาพหลักฐาน (JPG, PNG เท่านั้น) (ขนาดไม่เกิน 10 MB)</label>
+                </div>
+                <label for="imageUpload" class="file-upload-wrapper">
+                    <span>คลิกเพื่อเลือกไฟล์</span>
+                    <div id="fileName">ยังไม่มีไฟล์ที่เลือก</div>
+                </label>
+                <input type="file" id="imageUpload" name="imageUpload" accept="image/jpeg, image/png" required>
+                
+                <div class="image-preview-container">
+                    <img id="imagePreview" src="#" alt="Image Preview"/>
+                </div>
+            </div>
+            
+            <button type="submit" id="submitBtn">กดส่งข้อมูล<i class="fa-solid fa-lg fa-location-arrow"></i></button>
+        </form>
+    </div>
+
+    <script>
+
+      
+  // ฟังก์ชันสำหรับไปยังหน้าสถิติ
+  document.getElementById('statsButton').addEventListener('click', function() {
+  // เรียกใช้ฟังก์ชัน Apps Script เพื่อดึง URL ของ Web App
+  google.script.run
+    .withSuccessHandler(function(currentUrl) {
+      // เมื่อได้รับ URL กลับมาสำเร็จ ให้เปลี่ยนหน้าไปยังหน้าสถิติ
+      window.top.location.href = currentUrl + '?page=stats';
+    })
+    .getWebAppUrl(); // เรียกใช้ฟังก์ชันที่สร้างไว้ในไฟล์ .gs
+});
+
+/*// New: Use google.script.history.push to navigate within the iframe
+        document.getElementById('statsButton').addEventListener('click', function() {
+            google.script.history.push({}, '', '?page=stats');
+        });*/
+
+
+
+        const form = document.getElementById('runForm');
+        const fileInput = document.getElementById('imageUpload');
+        const fileNameDiv = document.getElementById('fileName');
+        const imagePreview = document.getElementById('imagePreview');
+
+        // NEW: Add file size check on file selection
+        fileInput.addEventListener('change', () => {
+            const MAX_SIZE_MB = 10;
+            const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+
+                // Check if file size exceeds the limit
+                if (file.size > MAX_SIZE_BYTES) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ไฟล์มีขนาดใหญ่เกินไป',
+                        text: `กรุณาเลือกไฟล์ที่มีขนาดไม่เกิน ${MAX_SIZE_MB} MB`,
+                    });
+                    
+                    // Reset the input and preview
+                    fileInput.value = ''; // This is crucial to clear the invalid file
+                    fileNameDiv.textContent = 'ยังไม่มีไฟล์ที่เลือก';
+                    imagePreview.style.display = 'none';
+                    imagePreview.setAttribute('src', '#');
+                    return; // Stop the function here
+                }
+
+                // If file is valid, show name and preview
+                fileNameDiv.textContent = file.name;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+
+            } else {
+                fileNameDiv.textContent = 'ยังไม่มีไฟล์ที่เลือก';
+                imagePreview.style.display = 'none';
+                imagePreview.setAttribute('src', '#');
+            }
+        });
+
+      
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Added an extra check to ensure a file is selected before submitting
+            if (fileInput.files.length === 0) {
+                 Swal.fire({
+                    icon: 'warning',
+                    title: 'ยังไม่ได้เลือกไฟล์',
+                    text: 'กรุณาแนบรูปภาพหลักฐานก่อนส่งข้อมูล',
+                });
+                return;
+            }
+
+            Swal.fire({
+                title: 'กำลังส่งข้อมูล...',
+                text: 'กรุณารอสักครู่ ระบบกำลังอัปโหลดไฟล์',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            const pad = (num) => String(num).padStart(2, '0');
+            
+            const hours = document.getElementById('duration_hr').value || 0;
+            const minutes = document.getElementById('duration_min').value || 0;
+            const seconds = document.getElementById('duration_sec').value || 0;
+
+            const combinedDuration = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+
+// --- START: MODIFIED DATE FORMATTING ---
+            const isoDate = form.elements.activityDate.value; // e.g., "2025-09-21"
+            const dateParts = isoDate.split('-'); // ["2025", "09", "21"]
+            const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`; // "21/09/2025"
+            // --- END: MODIFIED DATE FORMATTING ---
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            
+            reader.onloadend = function() {
+                const data = {
+                    fullName: form.elements.fullName.value,
+                    department: form.elements.department.value,
+                    activityDate: formattedDate, // Use the new formatted date
+                    activityTime: form.elements.activityTime.value,
+                    quantity: form.elements.quantity.value,
+                    duration: combinedDuration,
+                    fileData: reader.result.split(',')[1],
+                    fileName: file.name,
+                    mimeType: file.type
+                };
+
+                google.script.run
+                    .withSuccessHandler(onSuccess)
+                    .withFailureHandler(onFailure)
+                    .saveData(data);
+            };
+            
+            reader.readAsDataURL(file);
+        });
+
+        function onSuccess(response) {
+            Swal.fire({
+                icon: 'success',
+                title: 'ส่งข้อมูลสำเร็จ!',
+                text: response,
+            });
+            
+            form.reset();
+            fileNameDiv.textContent = 'ยังไม่มีไฟล์ที่เลือก';
+            imagePreview.style.display = 'none';
+            imagePreview.setAttribute('src', '#');
+        }
+
+        function onFailure(error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'เกิดข้อผิดพลาด!',
+                text: error.message,
+            });
+        }
+    </script>
+</body>
+</html>
